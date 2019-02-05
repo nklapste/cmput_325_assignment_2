@@ -8,15 +8,17 @@
 ;       A2Expr
 ;     * Nothing else is an A2Expr
 
-; check if the A2Expr list element is a valid operator `+`, `-`, or `*`
 (defun valid-A2Expr-op (Op)
+  "Check if the A2Expr list element is a valid operator `+`, `-`, or `*`
+Op: the operator element within a A2Expr list element"
   (or
     (eq '+ Op)
     (eq '- Op)
     (eq '* Op)))
 
-; check if the A2Expr element is x
 (defun valid-A2Expr-x (E)
+  "Check if the A2Expr element is the `x` character
+E: the A2Expr element to check"
   (eq 'x E))
 
 (defun valid-A2Expr-int (E)
@@ -32,9 +34,9 @@ E: the A2Expr element to check"
     (valid-A2Expr-x E)
     (valid-A2Expr-list-format E)))
 
-; check if the A2Expr element is a valid list element
-; e.g. `(+ E1 E2)`
 (defun valid-A2Expr-list-format (E)
+  "Check if the A2Expr element is a valid list element e.g `(+ E1 E2)`
+E: the A2Expr element to check"
   (and
     (listp E)
     (= 3 (LIST-LENGTH E))
