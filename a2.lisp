@@ -34,13 +34,13 @@ E: the A2Expr element to check"
 
 ; check if the A2Expr element is a valid list element
 ; e.g. `(+ E1 E2)`
-(defun valid-A2Expr-list-format (L)
+(defun valid-A2Expr-list-format (E)
   (and
-    (listp L)
-    (= 3 (LIST-LENGTH L))
-    (valid-A2Expr-op (nth 0 L))
-    (valid-A2Expr-var (nth 1 L))
-    (valid-A2Expr-var (nth 2 L)))))
+    (listp E)
+    (= 3 (LIST-LENGTH E))
+    (valid-A2Expr-op (nth 0 E))
+    (valid-A2Expr-var (nth 1 E))
+    (valid-A2Expr-var (nth 2 E)))))
 
 (defun A2Expr-zero-subtract-simplify (L)
   (if (valid-A2Expr-list-format L)
