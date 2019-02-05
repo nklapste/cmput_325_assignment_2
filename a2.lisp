@@ -2,10 +2,11 @@
 
 ; A2Expr - a more formal definition
 ;
-;     An integer is an A2Expr
-;     x is an A2Expr
-;     If E1 and E2 are A2Expr, then (+ E1 E2), (- E1 E2) and (* E1 E2) are A2Expr
-;     Nothing else is an A2Expr
+;     * An integer is an A2Expr
+;     * x is an A2Expr
+;     * If E1 and E2 are A2Expr, then (+ E1 E2), (- E1 E2) and (* E1 E2) are
+;       A2Expr
+;     * Nothing else is an A2Expr
 
 
 ;#1 (2 marks)
@@ -116,6 +117,7 @@
 ; See the normalize examples in public tests.
 (defun normalize (P) ())
 
+
 ; #5 (5 marks)
 ;
 ; Write a Lisp function:
@@ -126,6 +128,7 @@
 ; PExpr of E in normal form. First implement the three helper functions
 ; in 5.1 and 5.2.
 (defun polynomial (E) ())
+
 
 ; #5.1 (1 mark)
 ;
@@ -144,6 +147,7 @@
 ; normalize is your friend...
 ; If n is an integer, then (- n) computes its negative value. Note the space.
 (defun poly-add (P1 P2) ())
+
 
 (defun poly-subtract (P1 P2) ())
 
@@ -166,6 +170,7 @@
 ; The function cartesian in sample code list-functions.lisp is an example with
 ; similar structure, which may help you with the recursion over both P1 and P2.
 (defun poly-multiply (P1 P2) ())
+
 
 ; #5.3 (2 marks)
 ;
