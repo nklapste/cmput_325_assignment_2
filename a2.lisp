@@ -19,7 +19,10 @@
   (integerp In))
 
 (defun valid-A2Expr-var (E)
-  (or (valid-A2Expr-int E) (valid-A2Expr-x E) (valid-A2Expr-list-format E)))
+  (or
+    (valid-A2Expr-int E)
+    (valid-A2Expr-x E)
+    (valid-A2Expr-list-format E)))
 
 ; validate that input follows format (+,-,* atom atom)
 (defun valid-A2Expr-list-format (L)
