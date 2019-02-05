@@ -10,7 +10,10 @@
 
 ; input validators
 (defun valid-A2Expr-op (Op)
-  (or (eq '+ Op) (eq '- Op) (eq '* Op)))
+  (or
+    (eq '+ Op)
+    (eq '- Op)
+    (eq '* Op)))
 
 (defun valid-A2Expr-x (E)
   (eq 'x E))
