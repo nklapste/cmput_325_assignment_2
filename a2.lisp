@@ -75,18 +75,30 @@ E: the A2Expr element to check"
       L)
     L))
 
-(defun A2Expr-simplify-list (L)
-  (if (valid-A2Expr-var L)
-    (if (valid-A2Expr-list-format L)
-      (A2Expr-one-multiply-simplify (A2Expr-zero-subtract-simplify (A2Expr-zero-plus-simplify L)))
-      L)
+(defun A2Expr-simplify-list (LE)
+  "Simplify a A2Expr **list** element
+E: the A2Expr list element to simplify
+return: the simplified A2Expr list element or A2Expr element or NIL
+if the A2Expr is invalid"
+  (if (valid-A2Expr-var LE)
+    (if (valid-A2Expr-list-format LE)
+      (A2Expr-one-multiply-simplify
+        (A2Expr-zero-subtract-simplify
+          (A2Expr-zero-plus-simplify LE)))
+      LE)
     NIL))
 
-(defun A2Expr-simplify (L)
-  (if (valid-A2Expr-var L)
-    (if (valid-A2Expr-list-format L)
-      (A2Expr-simplify-list (list (nth 0 L) (A2Expr-simplify (nth 1 L)) (A2Expr-simplify (nth 2 L))))
-      L)
+(defun A2Expr-simplify (E)
+  "Simplify a A2Expr element
+E: the A2Expr element to simplify
+return: the simplified A2Expr element or NIL if the A2Expr is invalid"
+  (if (valid-A2Expr-var E)
+    (if (valid-A2Expr-list-format E)
+      (A2Expr-simplify-list
+        (list (nth 0 E)
+          (A2Expr-simplify (nth 1 E))
+          (A2Expr-simplify (nth 2 E))))
+      E)
     NIL))
 
 
