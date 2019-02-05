@@ -23,8 +23,12 @@
 
 ; validate that input follows format (+,-,* atom atom)
 (defun valid-A2Expr-list-format (L)
-  (and (listp L) (= 3 (LIST-LENGTH L)) (valid-A2Expr-op (nth 0 L)) (valid-A2Expr-var (nth 1 L)) (valid-A2Expr-var (nth 2 L)))))
-
+  (and
+    (listp L)
+    (= 3 (LIST-LENGTH L))
+    (valid-A2Expr-op (nth 0 L))
+    (valid-A2Expr-var (nth 1 L))
+    (valid-A2Expr-var (nth 2 L)))))
 
 (defun A2Expr-zero-subtract-simplify (L)
   (if (valid-A2Expr-list-format L)
