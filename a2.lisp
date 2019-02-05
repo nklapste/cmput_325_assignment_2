@@ -8,26 +8,32 @@
 ;       A2Expr
 ;     * Nothing else is an A2Expr
 
-; input validators
+; check if the A2Expr list element is a valid operator `+`, `-`, or `*`
 (defun valid-A2Expr-op (Op)
   (or
     (eq '+ Op)
     (eq '- Op)
     (eq '* Op)))
 
+; check if the A2Expr element is x
 (defun valid-A2Expr-x (E)
   (eq 'x E))
 
-(defun valid-A2Expr-int (In)
-  (integerp In))
+(defun valid-A2Expr-int (E)
+  "Check if the A2Expr element is a integerp
+E: the A2Expr element to check"
+  (integerp E))
 
 (defun valid-A2Expr-var (E)
+  "Check if the A2Expr element is valid
+E: the A2Expr element to check"
   (or
     (valid-A2Expr-int E)
     (valid-A2Expr-x E)
     (valid-A2Expr-list-format E)))
 
-; validate that input follows format (+,-,* atom atom)
+; check if the A2Expr element is a valid list element
+; e.g. `(+ E1 E2)`
 (defun valid-A2Expr-list-format (L)
   (and
     (listp L)
@@ -39,7 +45,7 @@
 (defun A2Expr-zero-subtract-simplify (L)
   (if (valid-A2Expr-list-format L)
     (if (eq '- (nth 0 L))
-      (if (eq 0 (nth 2 L)) ; call simplify here
+      (if (eq 0 (nth 2 L))
         (nth 1 L)
         L)
       L)
@@ -80,6 +86,7 @@
       (A2Expr-simplify-list (list (nth 0 L) (A2Expr-simplify (nth 1 L)) (A2Expr-simplify (nth 2 L))))
       L)
     NIL))
+
 
 ;#1 (2 marks)
 ;
