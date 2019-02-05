@@ -8,6 +8,57 @@
 ;       A2Expr
 ;     * Nothing else is an A2Expr
 
+; input validators
+(defun valid-A2Expr-op (Op)
+  (or (eq '+ Op) (eq '- Op) (eq '* Op)))
+
+(defun valid-A2Expr-x (E)
+  (eq 'x E))
+
+(defun valid-A2Expr-int (In)
+  (integerp In))
+
+(defun valid-A2Expr-var (E)
+  (or (valid-A2Expr-int E) (valid-A2Expr-x E) (valid-A2Expr-list-format E)))
+
+; validate that input follows format (+,-,* atom atom)
+(defun valid-A2Expr-list-format (L)
+  (and (listp L) (= 3 (LIST-LENGTH L)) (valid-A2Expr-op (nth 0 L)) (valid-A2Expr-var (nth 1 L)) (valid-A2Expr-var (nth 2 L)))))
+
+
+(defun A2Expr-zero-subtract-simplify (L)
+  (if (valid-A2Expr-list-format L)
+    (if (eq '- (nth 0 L))
+      (if (eq 0 (nth 2 L)) ; call simplify here
+        (nth 1 L)
+        L)
+      L)
+    L))
+
+(defun A2Expr-zero-plus-simplify (L)
+  (if (valid-A2Expr-list-format L)
+    (if (eq '+ (nth 0 L))
+      (if (eq 0 (nth 1 L))
+        (nth 2 L)
+        (if (eq 0 (nth 2 L))
+          (nth 1 L)
+          L))
+      L)
+    L))
+
+(defun A2Expr-simplify-list (L)
+  (if (valid-A2Expr-var L)
+    (if (valid-A2Expr-list-format L)
+      (A2Expr-zero-subtract-simplify (A2Expr-zero-plus-simplify L))
+      L)
+    NIL))
+
+(defun A2Expr-simplify (L)
+  (if (valid-A2Expr-var L)
+    (if (valid-A2Expr-list-format L)
+      (A2Expr-simplify-list (list (nth 0 L) (A2Expr-simplify (nth 1 L)) (A2Expr-simplify (nth 2 L))))
+      L)
+    NIL))
 
 ;#1 (2 marks)
 ;
@@ -21,7 +72,8 @@
 ; change E in any other way, and return the simplified A2Expr.
 ;
 ; See remove-identities Examples in public tests.
-(defun remove-identities (E) ())
+(defun remove-identities (E)
+  ())
 
 
 ; #2 (2 marks)
