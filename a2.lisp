@@ -56,10 +56,21 @@
       L)
     L))
 
+(defun A2Expr-one-multiply-simplify (L)
+  (if (valid-A2Expr-list-format L)
+    (if (eq '* (nth 0 L))
+      (if (eq 1 (nth 1 L))
+        (nth 2 L)
+        (if (eq 1 (nth 2 L))
+          (nth 1 L)
+          L))
+      L)
+    L))
+
 (defun A2Expr-simplify-list (L)
   (if (valid-A2Expr-var L)
     (if (valid-A2Expr-list-format L)
-      (A2Expr-zero-subtract-simplify (A2Expr-zero-plus-simplify L))
+      (A2Expr-one-multiply-simplify (A2Expr-zero-subtract-simplify (A2Expr-zero-plus-simplify L)))
       L)
     NIL))
 
