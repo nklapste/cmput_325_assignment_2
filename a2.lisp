@@ -44,40 +44,46 @@ E: the A2Expr element to check"
     (valid-A2Expr-var (nth 1 E))
     (valid-A2Expr-var (nth 2 E)))))
 
-(defun A2Expr-zero-subtract-simplify (L)
-  (if (valid-A2Expr-list-format L)
-    (if (eq '- (nth 0 L))
-      (if (eq 0 (nth 2 L))
-        (nth 1 L)
-        L)
-      L)
-    L))
+(defun A2Expr-zero-subtract-simplify (LE)
+  "Simplify a subtraction A2Expr
+LE: the A2Expr list element to apply the subtraction simplification"
+  (if (valid-A2Expr-list-format LE)
+    (if (eq '- (nth 0 LE))
+      (if (eq 0 (nth 2 LE))
+        (nth 1 LE)
+        LE)
+      LE)
+    LE))
 
-(defun A2Expr-zero-plus-simplify (L)
-  (if (valid-A2Expr-list-format L)
-    (if (eq '+ (nth 0 L))
-      (if (eq 0 (nth 1 L))
-        (nth 2 L)
-        (if (eq 0 (nth 2 L))
-          (nth 1 L)
-          L))
-      L)
-    L))
+(defun A2Expr-zero-plus-simplify (LE)
+  "Simplify a addition A2Expr
+LE: the A2Expr list element to apply the addition simplification"
+  (if (valid-A2Expr-list-format LE)
+    (if (eq '+ (nth 0 LE))
+      (if (eq 0 (nth 1 LE))
+        (nth 2 LE)
+        (if (eq 0 (nth 2 LE))
+          (nth 1 LE)
+          LE))
+      LE)
+    LE))
 
-(defun A2Expr-one-multiply-simplify (L)
-  (if (valid-A2Expr-list-format L)
-    (if (eq '* (nth 0 L))
-      (if (eq 1 (nth 1 L))
-        (nth 2 L)
-        (if (eq 1 (nth 2 L))
-          (nth 1 L)
-          L))
-      L)
-    L))
+(defun A2Expr-one-multiply-simplify (LE)
+  "Simplify a multiply A2Expr
+LE: the A2Expr list element to apply the multiply simplification"
+  (if (valid-A2Expr-list-format LE)
+    (if (eq '* (nth 0 LE))
+      (if (eq 1 (nth 1 LE))
+        (nth 2 LE)
+        (if (eq 1 (nth 2 LE))
+          (nth 1 LE)
+          LE))
+      LE)
+    LE))
 
 (defun A2Expr-simplify-list (LE)
   "Simplify a A2Expr **list** element
-E: the A2Expr list element to simplify
+LE: the A2Expr list element to simplify
 return: the simplified A2Expr list element or A2Expr element or NIL
 if the A2Expr is invalid"
   (if (valid-A2Expr-var LE)
