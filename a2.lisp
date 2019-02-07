@@ -45,7 +45,7 @@ E: the A2Expr element to check"
     (valid-A2Expr-element (nth 2 E))))
 
 (defun A2Expr-zero-subtract-simplify (LE)
-  "Simplify a subtraction of form A2Expr `(- E1 0)` to simply `E1`
+  "Simplify a zero subtraction A2Expr e.g. `(- E1 0)` simplified to `E1`
 LE: the A2Expr list element to apply the subtraction simplification"
   (if (valid-A2Expr-list-element  LE)
     (if (eq '- (nth 0 LE))
@@ -56,7 +56,7 @@ LE: the A2Expr list element to apply the subtraction simplification"
     LE))
 
 (defun A2Expr-self-subtract-simplify (LE)
-  "Simplify a subtraction of form A2Expr `(- E1 E1)` to simply `0`
+  "Simplify a self subtraction A2Expr e.g. `(- E1 E1)` simplified to `0`
     LE: the A2Expr list element to apply the subtraction simplification"
   (if (valid-A2Expr-list-element  LE)
     (if (and (eq '- (nth 0 LE)) (equal (nth 1 LE) (nth 2 LE)))
@@ -65,7 +65,7 @@ LE: the A2Expr list element to apply the subtraction simplification"
     LE))
 
 (defun A2Expr-zero-plus-simplify (LE)
-  "Simplify a addition A2Expr
+  "Simplify a zero addition A2Expr e.g. `(+ 0 E1)` simplified to `E1`
 LE: the A2Expr list element to apply the addition simplification"
   (if (valid-A2Expr-list-element  LE)
     (if (eq '+ (nth 0 LE))
@@ -78,7 +78,7 @@ LE: the A2Expr list element to apply the addition simplification"
     LE))
 
 (defun A2Expr-one-multiply-simplify (LE)
-  "Simplify a multiply by one A2Expr
+  "Simplify a multiply by one A2Expr e.g. `(* 1 E1)` simplified to `E1`
 LE: the A2Expr list element to apply the multiply simplification"
   (if (valid-A2Expr-list-element  LE)
     (if (eq '* (nth 0 LE))
@@ -91,7 +91,7 @@ LE: the A2Expr list element to apply the multiply simplification"
     LE))
 
 (defun A2Expr-zero-multiply-simplify (LE)
-  "Simplify a multiply by zero A2Expr
+  "Simplify a multiply by zero A2Expr e.g. `(* 0 E1)` simplified to `0`
     LE: the A2Expr list element to apply the multiply simplification"
   (if (valid-A2Expr-list-element  LE)
     (if (eq '* (nth 0 LE))
@@ -105,7 +105,7 @@ LE: the A2Expr list element to apply the multiply simplification"
 
 
 (defun A2Expr-simplify-list-element (LE)
-  "Simplify a A2Expr **list** element e.g. `(+ E1 E2)`
+  "Simplify a A2Expr **list** element
 LE: the A2Expr list element to simplify
 return: the simplified A2Expr list element or A2Expr element or NIL
 if the A2Expr is invalid"
@@ -113,7 +113,7 @@ if the A2Expr is invalid"
     (if (valid-A2Expr-list-element  LE)
       (A2Expr-one-multiply-simplify
         (A2Expr-zero-multiply-simplify
-          (A2Expr-zero-subtract-simplify 
+          (A2Expr-zero-subtract-simplify
             (A2Expr-self-subtract-simplify
               (A2Expr-zero-plus-simplify LE)))))
       LE)
