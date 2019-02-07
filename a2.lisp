@@ -103,7 +103,6 @@ LE: the A2Expr list element to apply the multiply simplification"
       LE)
     LE))
 
-
 (defun A2Expr-simplify-list-element (LE)
   "Simplify a A2Expr **list** element
 LE: the A2Expr list element to simplify
@@ -131,7 +130,7 @@ return: the simplified A2Expr element or NIL if the A2Expr is invalid"
           (A2Expr-simplify-element (nth 2 E))))
       E)
     NIL))
-
+    
 
 ;#1 (2 marks)
 ;
