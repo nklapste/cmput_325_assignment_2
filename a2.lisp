@@ -146,7 +146,7 @@ return: the simplified A2Expr element or NIL if the A2Expr is invalid"
 ; See remove-identities Examples in public tests.
 (defun A2Expr-simplify-list-element-q1 (LE)
   "Simplify a A2Expr **list** element. Only applying zero-plus and one-multiply
-Simplifications.
+simplifications.
 LE: the A2Expr list element to simplify
 return: the simplified A2Expr list element or A2Expr element or NIL
 if the A2Expr is invalid"
@@ -159,7 +159,7 @@ if the A2Expr is invalid"
 
 (defun A2Expr-simplify-element-q1 (E)
   "Simplify a A2Expr element. Only applying zero-plus and one-multiply
-Simplifications.
+simplifications.
 E: the A2Expr element to simplify
 return: the simplified A2Expr element or NIL if the A2Expr is invalid"
   (if (valid-A2Expr-element E)
@@ -187,7 +187,36 @@ return: the simplified A2Expr element or NIL if the A2Expr is invalid"
 ; in any other way, and return the simplified A2Expr.
 ;
 ; See simplify-zeroes Examples in public tests.
-(defun simplify-zeroes (E) ())
+
+(defun A2Expr-simplify-list-element-q2 (LE)
+  "Simplify a A2Expr **list** element. Only applying self-subtract and
+zero-multiply simplifications.
+LE: the A2Expr list element to simplify
+return: the simplified A2Expr list element or A2Expr element or NIL
+if the A2Expr is invalid"
+  (if (valid-A2Expr-element LE)
+    (if (valid-A2Expr-list-element  LE)
+      (A2Expr-zero-multiply-simplify
+        (A2Expr-self-subtract-simplify LE))
+      LE)
+    NIL))
+
+(defun A2Expr-simplify-element-q2 (E)
+  "Simplify a A2Expr element. Only applying self-subtract and
+zero-multiply simplifications.
+E: the A2Expr element to simplify
+return: the simplified A2Expr element or NIL if the A2Expr is invalid"
+  (if (valid-A2Expr-element E)
+    (if (valid-A2Expr-list-element  E)
+      (A2Expr-simplify-list-element-q2
+        (list (nth 0 E)
+          (A2Expr-simplify-element-q2 (nth 1 E))
+          (A2Expr-simplify-element-q2 (nth 2 E))))
+      E)
+    NIL))
+
+(defun simplify-zeroes (E)
+ (A2Expr-simplify-element-q2 E))
 
 
 ; #3 (1 mark + 1 possible bonus mark)
