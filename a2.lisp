@@ -339,6 +339,47 @@ return: the simplified A2Expr element or NIL if the A2Expr is invalid"
 ; The input E is an arbitrary A2Expr. The output is the equivalent
 ; PExpr of E in normal form. First implement the three helper functions
 ; in 5.1 and 5.2.
+
+
+
+(defun add-PExpr (E1 E2)
+ (normalize (append E1 E2)))
+
+
+(defun flip-coefficient-sign (PL)
+ (mapcar #'(lambda(x) (cons . ((* -1 (car x)) (cdr x)))) PL))
+
+
+(defun subtract-PExpr (E1 E2)
+ (normalize (append E1 (flip-coefficient-sign E2))))
+
+(defun A2Expr-element-to-PExpr-element (E)
+  (if (valid-A2Expr-element E)
+   (if (valid-A2Expr-x E)
+    (cons (cons . (1 1)) ())
+    (if (valid-A2Expr-int E)
+      (cons (cons . (E 0)) ())))))
+
+
+(defun A2Expr-to-PExpr (E)
+ (if (valid-A2Expr-element E)
+   (if (valid-A2Expr-list-element E)
+     (A2Expr-list-element-to-PExpr-list-element E)
+     (A2Expr-element-to-PExpr-element E))))
+
+(defun conver (E)
+ (if (eq '- (nth 0 LE)) ()()))
+
+(defun A2Expr-list-element-to-PExpr-list-element (LE)
+  (if (valid-A2Expr-element LE)
+    (if (valid-A2Expr-list-element LE)
+      (case (nth 0 LE)
+       ('+ (add-PExpr (A2Expr-to-PExpr (nth 1 LE)) (A2Expr-to-PExpr (nth 2 LE))))
+       ('- (subtract-PExpr (A2Expr-to-PExpr (nth 1 LE)) (A2Expr-to-PExpr (nth 2 LE))))
+       ('* (multiply-PExpr (A2Expr-to-PExpr (nth 1 LE)) (A2Expr-to-PExpr (nth 2 LE)))))
+      NIL)
+    NIL))
+
 (defun polynomial (E) ())
 
 
