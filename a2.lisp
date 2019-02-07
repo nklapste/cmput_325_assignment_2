@@ -130,7 +130,7 @@ return: the simplified A2Expr element or NIL if the A2Expr is invalid"
           (A2Expr-simplify-element (nth 2 E))))
       E)
     NIL))
-    
+
 
 ;#1 (2 marks)
 ;
@@ -144,8 +144,35 @@ return: the simplified A2Expr element or NIL if the A2Expr is invalid"
 ; change E in any other way, and return the simplified A2Expr.
 ;
 ; See remove-identities Examples in public tests.
+(defun A2Expr-simplify-list-element-q1 (LE)
+  "Simplify a A2Expr **list** element. Only applying zero-plus and one-multiply
+Simplifications.
+LE: the A2Expr list element to simplify
+return: the simplified A2Expr list element or A2Expr element or NIL
+if the A2Expr is invalid"
+  (if (valid-A2Expr-element LE)
+    (if (valid-A2Expr-list-element  LE)
+      (A2Expr-one-multiply-simplify
+        (A2Expr-zero-plus-simplify LE))
+      LE)
+    NIL))
+
+(defun A2Expr-simplify-element-q1 (E)
+  "Simplify a A2Expr element. Only applying zero-plus and one-multiply
+Simplifications.
+E: the A2Expr element to simplify
+return: the simplified A2Expr element or NIL if the A2Expr is invalid"
+  (if (valid-A2Expr-element E)
+    (if (valid-A2Expr-list-element  E)
+      (A2Expr-simplify-list-element-q1
+        (list (nth 0 E)
+          (A2Expr-simplify-element-q1 (nth 1 E))
+          (A2Expr-simplify-element-q1 (nth 2 E))))
+      E)
+    NIL))
+
 (defun remove-identities (E)
-  (A2Expr-simplify-element E))
+  (A2Expr-simplify-element-q1 E))
 
 
 ; #2 (2 marks)
