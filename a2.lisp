@@ -232,7 +232,15 @@ return: the simplified A2Expr element or NIL if the A2Expr is invalid"
 ; until no more simplification is possible in either step 1 or 2.
 ;
 ; See simplify Examples in public tests.
-(defun simplify (E) ())
+
+(defun simplify-rec (E PE)
+ (if (equal E PE)
+  E
+  (simplify-rec (remove-identities (simplify-zeroes E)) E)))
+
+
+(defun simplify (E)
+ (simplify-rec (remove-identities (simplify-zeroes E)) E))
 
 
 ; #3 bonus question (1 bonus mark)
