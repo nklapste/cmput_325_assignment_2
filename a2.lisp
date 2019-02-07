@@ -112,8 +112,10 @@ if the A2Expr is invalid"
   (if (valid-A2Expr-element LE)
     (if (valid-A2Expr-list-element  LE)
       (A2Expr-one-multiply-simplify
-        (A2Expr-zero-subtract-simplify
-          (A2Expr-zero-plus-simplify LE)))
+        (A2Expr-zero-multiply-simplify
+          (A2Expr-zero-subtract-simplify 
+            (A2Expr-self-subtract-simplify
+              (A2Expr-zero-plus-simplify LE)))))
       LE)
     NIL))
 
