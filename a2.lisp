@@ -26,28 +26,28 @@ E: the A2Expr element to check"
 E: the A2Expr element to check"
   (integerp E))
 
-(defun valid-A2Expr-var (E)
+(defun valid-A2Expr-element (E)
   "Check if the A2Expr element is valid
 E: the A2Expr element to check"
   (or
     (valid-A2Expr-int E)
     (valid-A2Expr-x E)
-    (valid-A2Expr-list-format E)))
+    (valid-A2Expr-list-element  E)))
 
-(defun valid-A2Expr-list-format (E)
-  "Check if the A2Expr element is a valid list element e.g `(+ E1 E2)`
+(defun valid-A2Expr-list-element  (E)
+  "Check if the A2Expr element is a valid list element e.g. `(+ E1 E2)`
 E: the A2Expr element to check"
   (and
     (listp E)
     (= 3 (LIST-LENGTH E))
     (valid-A2Expr-op (nth 0 E))
-    (valid-A2Expr-var (nth 1 E))
-    (valid-A2Expr-var (nth 2 E)))))
+    (valid-A2Expr-element (nth 1 E))
+    (valid-A2Expr-element (nth 2 E))))
 
 (defun A2Expr-zero-subtract-simplify (LE)
   "Simplify a subtraction A2Expr
 LE: the A2Expr list element to apply the subtraction simplification"
-  (if (valid-A2Expr-list-format LE)
+  (if (valid-A2Expr-list-element  LE)
     (if (eq '- (nth 0 LE))
       (if (eq 0 (nth 2 LE))
         (nth 1 LE)
@@ -58,7 +58,7 @@ LE: the A2Expr list element to apply the subtraction simplification"
 (defun A2Expr-zero-plus-simplify (LE)
   "Simplify a addition A2Expr
 LE: the A2Expr list element to apply the addition simplification"
-  (if (valid-A2Expr-list-format LE)
+  (if (valid-A2Expr-list-element  LE)
     (if (eq '+ (nth 0 LE))
       (if (eq 0 (nth 1 LE))
         (nth 2 LE)
@@ -71,7 +71,7 @@ LE: the A2Expr list element to apply the addition simplification"
 (defun A2Expr-one-multiply-simplify (LE)
   "Simplify a multiply A2Expr
 LE: the A2Expr list element to apply the multiply simplification"
-  (if (valid-A2Expr-list-format LE)
+  (if (valid-A2Expr-list-element  LE)
     (if (eq '* (nth 0 LE))
       (if (eq 1 (nth 1 LE))
         (nth 2 LE)
@@ -81,29 +81,29 @@ LE: the A2Expr list element to apply the multiply simplification"
       LE)
     LE))
 
-(defun A2Expr-simplify-list (LE)
-  "Simplify a A2Expr **list** element
+(defun A2Expr-simplify-list-element (LE)
+  "Simplify a A2Expr **list** element e.g. `(+ E1 E2)`
 LE: the A2Expr list element to simplify
 return: the simplified A2Expr list element or A2Expr element or NIL
 if the A2Expr is invalid"
-  (if (valid-A2Expr-var LE)
-    (if (valid-A2Expr-list-format LE)
+  (if (valid-A2Expr-element LE)
+    (if (valid-A2Expr-list-element  LE)
       (A2Expr-one-multiply-simplify
         (A2Expr-zero-subtract-simplify
           (A2Expr-zero-plus-simplify LE)))
       LE)
     NIL))
 
-(defun A2Expr-simplify (E)
+(defun A2Expr-simplify-element (E)
   "Simplify a A2Expr element
 E: the A2Expr element to simplify
 return: the simplified A2Expr element or NIL if the A2Expr is invalid"
-  (if (valid-A2Expr-var E)
-    (if (valid-A2Expr-list-format E)
-      (A2Expr-simplify-list
+  (if (valid-A2Expr-element E)
+    (if (valid-A2Expr-list-element  E)
+      (A2Expr-simplify-list-element
         (list (nth 0 E)
-          (A2Expr-simplify (nth 1 E))
-          (A2Expr-simplify (nth 2 E))))
+          (A2Expr-simplify-element (nth 1 E))
+          (A2Expr-simplify-element (nth 2 E))))
       E)
     NIL))
 
@@ -121,7 +121,7 @@ return: the simplified A2Expr element or NIL if the A2Expr is invalid"
 ;
 ; See remove-identities Examples in public tests.
 (defun remove-identities (E)
-  ())
+  (A2Expr-simplify-element E))
 
 
 ; #2 (2 marks)
