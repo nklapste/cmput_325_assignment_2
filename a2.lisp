@@ -294,7 +294,31 @@ return: the simplified A2Expr element or NIL if the A2Expr is invalid"
 ; ((5 . 3) (0 . 2) (3 . 1) (7 . 0)) - zero coefficient in (0 . 2)
 ; ((0 . 0)) - zero coefficient
 
+; helper get functions
+(defun get-coefficient (P)
+ (car P))
 
+(defun get-exponent (P)
+ (cdr P))
+
+(defun sort-PExpr-list (PL)
+ (sort PL #'> :key #'cdr))
+
+(defun add-two-PExpr-components (P1 P2)
+ (cons . ((+ (get-coefficient P1) (get-coefficient P2)) (get-exponent P1))))
+
+(defun concentrate-sorted-PExpr-list (SPL)
+ (if (null SPL)
+  ()
+  (if (eq (get-exponent (nth 0 SPL)) (get-exponent (nth 1 SPL)))
+      (concentrate-sorted-PExpr-list (cons (add-two-PExpr-components (nth 0 spl) (nth 1 spl)) (cddr SPL)))
+      (cons (car SPL) (concentrate-sorted-PExpr-list (cdr SPL))))))
+
+(defun concentrate-PExpr-list (PL)
+  (concentrate-sorted-PExpr-list (sort-PExpr-list PL)))
+
+
+; example sorting list of dotted lists
 ; #4 (2 marks)
 ;
 ; Write a Lisp function:
@@ -303,7 +327,7 @@ return: the simplified A2Expr element or NIL if the A2Expr is invalid"
 ;
 ; The input P is an arbitrary PExpr. The output is the normal form of P.
 ; See the normalize examples in public tests.
-(defun normalize (P) ())
+(defun normalize (P) (concentrate-PExpr-list P))
 
 
 ; #5 (5 marks)
