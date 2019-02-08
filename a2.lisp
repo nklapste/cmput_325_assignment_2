@@ -463,6 +463,7 @@ return: the simplified A2Expr element or NIL if the A2Expr is invalid"
 ;
 ; See print-pexpr Examples in public tests, and string functions.
 
+; TODO: this is a dumpster fire and should be refactored
 (defun stringify-PExpr-element-exponent (PEEC PEEE)
   (if (/= 0 PEEC)
     (if (/= 0 PEEE)
