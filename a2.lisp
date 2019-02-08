@@ -386,10 +386,6 @@ return: the simplified A2Expr element or NIL if the A2Expr is invalid"
        ('- (subtract-PExpr (A2Expr-to-PExpr (nth 1 A2LE)) (A2Expr-to-PExpr (nth 2 A2LE))))
        ('* (multiply-PExpr (A2Expr-to-PExpr (nth 1 A2LE)) (A2Expr-to-PExpr (nth 2 A2LE))))))))
 
-(defun polynomial (E)
-  (A2Expr-to-PExpr E))
-
-
 ; #5.1 (1 mark)
 ;
 ; Write two Lisp functions:
@@ -441,6 +437,9 @@ return: the simplified A2Expr element or NIL if the A2Expr is invalid"
 ; 2. atom x - represent by (1 . 1)
 ;
 ; See polynomial examples in public tests.
+
+(defun polynomial (E)
+  (A2Expr-to-PExpr E))
 
 
 ; #6 (2 marks) Printing a PExpr in normal form
