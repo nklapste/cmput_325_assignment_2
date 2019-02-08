@@ -294,25 +294,29 @@ return: the simplified A2Expr element or NIL if the A2Expr is invalid"
 ; ((5 . 3) (0 . 2) (3 . 1) (7 . 0)) - zero coefficient in (0 . 2)
 ; ((0 . 0)) - zero coefficient
 
+; PE -> PExpr
+; SPE -> sorted PExpr
+; PEE -> PExpr element
+
 ; helper get functions
-(defun get-coefficient (P)
- (car P))
+(defun get-coefficient (PEE)
+ (car PEE))
 
-(defun get-exponent (P)
- (cdr P))
+(defun get-exponent (PEE)
+ (cdr PEE))
 
-(defun sort-PExpr-list (PL)
- (sort PL #'> :key #'cdr))
+(defun sort-PExpr (PE)
+ (sort PE #'> :key #'cdr))
 
-(defun add-two-PExpr-components (P1 P2)
- (cons . ((+ (get-coefficient P1) (get-coefficient P2)) (get-exponent P1))))
+(defun add-two-PExpr-components (PEE1 PEE2)
+ (cons . ((+ (get-coefficient PEE1) (get-coefficient PEE2)) (get-exponent PEE1))))
 
-(defun concentrate-sorted-PExpr-list (SPL)
- (if (null SPL)
+(defun concentrate-sorted-PExpr-list (SPE)
+ (if (null SPE)
   ()
-  (if (eq (get-exponent (nth 0 SPL)) (get-exponent (nth 1 SPL)))
-      (concentrate-sorted-PExpr-list (cons (add-two-PExpr-components (nth 0 spl) (nth 1 spl)) (cddr SPL)))
-      (cons (car SPL) (concentrate-sorted-PExpr-list (cdr SPL))))))
+  (if (eq (get-exponent (nth 0 SPE)) (get-exponent (nth 1 SPE)))
+      (concentrate-sorted-PExpr-list (cons (add-two-PExpr-components (nth 0 SPE) (nth 1 SPE)) (cddr SPE)))
+      (cons (car SPE) (concentrate-sorted-PExpr-list (cdr SPE))))))
 
 (defun concentrate-PExpr-list (PL)
   (concentrate-sorted-PExpr-list (sort-PExpr-list PL)))
@@ -341,46 +345,49 @@ return: the simplified A2Expr element or NIL if the A2Expr is invalid"
 ; in 5.1 and 5.2.
 
 
+(defun multiply-PExpr-element (PEE1 PEE2)
+  (cons
+    (* (get-coefficient PEE1) (get-coefficient PEE2))
+    (+ (get-exponent PEE1) (get-exponent PEE2))))
 
-(defun add-PExpr (E1 E2)
- (normalize (append E1 E2)))
+(defun multiply-PExpr (PE1 PE2)
+  (normalize
+    (mapcan  #'(lambda(E1)
+      (mapcar #'(lambda(E2) (multiply-PExpr-element E1 E2)) PE1))
+      PE2)))
 
+(defun add-PExpr (PE1 PE2)
+ (normalize (append PE1 PE2)))
 
-(defun flip-coefficient-sign (PL)
- (mapcar #'(lambda(x) (cons . ((* -1 (car x)) (cdr x)))) PL))
+(defun flip-PExpr-coefficients-sign (PE)
+ (mapcar #'(lambda(PEE) (cons . ((* -1 (get-coefficient PEE)) (get-exponent PEE)))) PE))
 
+(defun subtract-PExpr (PE1 PE2)
+ (normalize (append PE1 (flip-PExpr-coefficients-sign PE2))))
 
-(defun subtract-PExpr (E1 E2)
- (normalize (append E1 (flip-coefficient-sign E2))))
+(defun A2Expr-element-to-PExpr (A2E)
+  (if (valid-A2Expr-element A2E)
+   (if (valid-A2Expr-x A2E)
+    (list (cons 1 1))
+    (if (valid-A2Expr-int A2E)
+      (list (cons A2E 0))))))
 
-(defun A2Expr-element-to-PExpr-element (E)
-  (if (valid-A2Expr-element E)
-   (if (valid-A2Expr-x E)
-    (cons (cons . (1 1)) ())
-    (if (valid-A2Expr-int E)
-      (cons (cons . (E 0)) ())))))
+(defun A2Expr-to-PExpr (A2E)
+ (if (valid-A2Expr-element A2E)
+   (if (valid-A2Expr-list-element A2E)
+     (A2Expr-list-element-to-PExpr-list-element A2E)
+     (A2Expr-element-to-PExpr-element A2E))))
 
+(defun A2Expr-list-element-to-PExpr-list-element (A2LE)
+  (if (valid-A2Expr-element A2LE)
+    (if (valid-A2Expr-list-element A2LE)
+      (case (nth 0 A2LE)
+       ('+ (add-PExpr (A2Expr-to-PExpr (nth 1 A2LE)) (A2Expr-to-PExpr (nth 2 A2LE))))
+       ('- (subtract-PExpr (A2Expr-to-PExpr (nth 1 A2LE)) (A2Expr-to-PExpr (nth 2 A2LE))))
+       ('* (multiply-PExpr (A2Expr-to-PExpr (nth 1 A2LE)) (A2Expr-to-PExpr (nth 2 A2LE))))))))
 
-(defun A2Expr-to-PExpr (E)
- (if (valid-A2Expr-element E)
-   (if (valid-A2Expr-list-element E)
-     (A2Expr-list-element-to-PExpr-list-element E)
-     (A2Expr-element-to-PExpr-element E))))
-
-(defun conver (E)
- (if (eq '- (nth 0 LE)) ()()))
-
-(defun A2Expr-list-element-to-PExpr-list-element (LE)
-  (if (valid-A2Expr-element LE)
-    (if (valid-A2Expr-list-element LE)
-      (case (nth 0 LE)
-       ('+ (add-PExpr (A2Expr-to-PExpr (nth 1 LE)) (A2Expr-to-PExpr (nth 2 LE))))
-       ('- (subtract-PExpr (A2Expr-to-PExpr (nth 1 LE)) (A2Expr-to-PExpr (nth 2 LE))))
-       ('* (multiply-PExpr (A2Expr-to-PExpr (nth 1 LE)) (A2Expr-to-PExpr (nth 2 LE)))))
-      NIL)
-    NIL))
-
-(defun polynomial (E) ())
+(defun polynomial (E)
+  (A2Expr-to-PExpr E))
 
 
 ; #5.1 (1 mark)
