@@ -406,10 +406,10 @@ return: the simplified A2Expr element or NIL if the A2Expr is invalid"
 ; Hints:
 ; normalize is your friend...
 ; If n is an integer, then (- n) computes its negative value. Note the space.
-(defun poly-add (P1 P2) ())
+(defun poly-add (P1 P2) (add-PExpr P1 P2))
 
 
-(defun poly-subtract (P1 P2) ())
+(defun poly-subtract (P1 P2) (subtract-PExpr P1 P2))
 
 
 ; #5.2 (2 marks)
@@ -429,7 +429,7 @@ return: the simplified A2Expr element or NIL if the A2Expr is invalid"
 ;
 ; The function cartesian in sample code list-functions.lisp is an example with
 ; similar structure, which may help you with the recursion over both P1 and P2.
-(defun poly-multiply (P1 P2) ())
+(defun poly-multiply (P1 P2) (multiply-PExpr P1 P2))
 
 
 ; #5.3 (2 marks)
