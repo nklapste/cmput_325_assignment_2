@@ -484,11 +484,7 @@ return: the simplified A2Expr element or NIL if the A2Expr is invalid"
 
 (defun stringify-PExpr-element (PEE)
   (if (/= 0 (get-coefficient PEE))
-    (format nil "~{~A~}")
-    (remove nil
-      (list
-        (stringify-PExpr-element-coefficient (get-coefficient PEE) (get-exponent PEE))
-        (stringify-PExpr-element-exponent (get-exponent PEE))))))
+    (format nil "~{~A~}" (remove nil (list (stringify-PExpr-element-coefficient (get-coefficient PEE) (get-exponent PEE)) (stringify-PExpr-element-exponent (get-exponent PEE)))))))
 
 (defun list-stringify-PExpr (PE)
   (remove nil (mapcar #'(lambda(PEE) (stringify-PExpr-element PEE)) PE)))
