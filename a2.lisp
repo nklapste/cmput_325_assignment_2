@@ -319,7 +319,7 @@ return: the simplified A2Expr element or NIL if the A2Expr is invalid"
       (cons (car SPE) (concentrate-sorted-PExpr-list (cdr SPE))))))
 
 (defun concentrate-PExpr-list (PL)
-  (concentrate-sorted-PExpr-list (sort-PExpr-list PL)))
+  (concentrate-sorted-PExpr-list (sort-PExpr PL)))
 
 
 ; example sorting list of dotted lists
@@ -352,8 +352,7 @@ return: the simplified A2Expr element or NIL if the A2Expr is invalid"
 
 (defun multiply-PExpr (PE1 PE2)
   (normalize
-    (mapcan  #'(lambda(E1)
-      (mapcar #'(lambda(E2) (multiply-PExpr-element E1 E2)) PE1))
+    (mapcan  #'(lambda(E1) (mapcar #'(lambda(E2) (multiply-PExpr-element E1 E2)) PE1))
       PE2)))
 
 (defun add-PExpr (PE1 PE2)
@@ -376,7 +375,7 @@ return: the simplified A2Expr element or NIL if the A2Expr is invalid"
  (if (valid-A2Expr-element A2E)
    (if (valid-A2Expr-list-element A2E)
      (A2Expr-list-element-to-PExpr-list-element A2E)
-     (A2Expr-element-to-PExpr-element A2E))))
+     (A2Expr-element-to-PExpr A2E))))
 
 (defun A2Expr-list-element-to-PExpr-list-element (A2LE)
   (if (valid-A2Expr-element A2LE)
@@ -463,4 +462,38 @@ return: the simplified A2Expr element or NIL if the A2Expr is invalid"
 ;     Print 0 if the PExpr is nil.
 ;
 ; See print-pexpr Examples in public tests, and string functions.
-(defun print-pexpr (P) ())
+
+(defun stringify-PExpr-element-exponent (PEEE)
+  (if (/= 0 PEEE)
+    (if (/= 1 PEEE)
+      (format nil "x^~d" PEEE)
+      "x")
+    ""))
+
+; TODO: cleanup
+(defun stringify-PExpr-element-coefficient (PEEC PEEE)
+  (if (/= 0 PEEC)
+    (if (/= 1 PEEC)
+      (if (> 0 PEEC)
+        (format nil "- ~d" (abs PEEC))
+        (format nil "+ ~d" PEEC))
+      (if (= 0 PEEE)
+        (if (> 0 PEEC)
+          (format nil "- ~d" (abs PEEC))
+          (format nil "+ ~d" PEEC))))))
+
+(defun stringify-PExpr-element (PEE)
+  (if (/= 0 (get-coefficient PEE))
+    (format nil "~{~A~}")
+    (remove nil
+      (list
+        (stringify-PExpr-element-coefficient (get-coefficient PEE) (get-exponent PEE))
+        (stringify-PExpr-element-exponent (get-exponent PEE))))))
+
+(defun list-stringify-PExpr (PE)
+  (remove nil (mapcar #'(lambda(PEE) (stringify-PExpr-element PEE)) PE)))
+
+(defun stringify-PExpr (PE)
+  (format nil "~{~A~^ ~}" (list-stringify-PExpr PE)))
+
+(defun print-pexpr (P) (stringify-PExpr P))
