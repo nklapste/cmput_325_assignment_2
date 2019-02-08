@@ -73,6 +73,8 @@
                '(- (* 5 (+ 2 x)) (* 5 (+ x 2))))
 ; It does not simplify, (+ 2 x) and (+ x 2) look different
 
+(test-case 2.8 (simplify-zeroes '(* 0 x)) 0)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; 3. tests for simplify
 ;Some examples where one type of simplification enables the other.
@@ -93,6 +95,8 @@
                '(+ 5 (- 4 9))
 )
 
+(test-case 3.9 (simplify '(* 0 x)) 0)
+(test-case 3.10 (simplify '(* (- 9 9) (+ 5 0))) 0)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; 4. tests for normalize
@@ -341,8 +345,8 @@
 
 (test-case 6.8
     (print-pexpr '((1 . 100)))
-    "x^100"
-)
+    "x^100")
+
 
 ; Examples of BAD output of print-pexpr:
 ; 1 + 1 (cannot happen with input in normal form)
@@ -354,7 +358,7 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-Finally, tests that combine polynomial and print-pexpr
+;Finally, tests that combine polynomial and print-pexpr
 
 (test-case 'combined.1
     (let
@@ -405,9 +409,8 @@ Finally, tests that combine polynomial and print-pexpr
            (P8 (list '* P4 P4))
            (P16 (list '* P8 P8))
            (P32 (list '* P16 P16))
-           (P32-PExpr (polynomial P32))
-          )
-        (print-pexpr P32-PExpr)
-    )
-    "x^32 - 32x^31 + 496x^30 - 4960x^29 + 35960x^28 - 201376x^27 + 906192x^26 - 3365856x^25 + 10518300x^24 - 28048800x^23 + 64512240x^22 - 129024480x^21 + 225792840x^20 - 347373600x^19 + 471435600x^18 - 565722720x^17 + 601080390x^16 - 565722720x^15 + 471435600x^14 - 347373600x^13 + 225792840x^12 - 129024480x^11 + 64512240x^10 - 28048800x^9 + 10518300x^8 - 3365856x^7 + 906192x^6 - 201376x^5 + 35960x^4 - 4960x^3 + 496x^2 - 32x + 1"
-)
+           (P32-PExpr (polynomial P32)))
+
+        (print-pexpr P32-PExpr))
+
+    "x^32 - 32x^31 + 496x^30 - 4960x^29 + 35960x^28 - 201376x^27 + 906192x^26 - 3365856x^25 + 10518300x^24 - 28048800x^23 + 64512240x^22 - 129024480x^21 + 225792840x^20 - 347373600x^19 + 471435600x^18 - 565722720x^17 + 601080390x^16 - 565722720x^15 + 471435600x^14 - 347373600x^13 + 225792840x^12 - 129024480x^11 + 64512240x^10 - 28048800x^9 + 10518300x^8 - 3365856x^7 + 906192x^6 - 201376x^5 + 35960x^4 - 4960x^3 + 496x^2 - 32x + 1")
