@@ -463,33 +463,60 @@ return: the simplified A2Expr element or NIL if the A2Expr is invalid"
 ;
 ; See print-pexpr Examples in public tests, and string functions.
 
-(defun stringify-PExpr-element-exponent (PEEE)
-  (if (/= 0 PEEE)
-    (if (/= 1 PEEE)
-      (format nil "x^~d" PEEE)
-      "x")
-    ""))
-
-; TODO: cleanup
-(defun stringify-PExpr-element-coefficient (PEEC PEEE)
+(defun stringify-PExpr-element-exponent (PEEC PEEE)
   (if (/= 0 PEEC)
-    (if (/= 1 PEEC)
-      (if (> 0 PEEC)
-        (format nil "- ~d" (abs PEEC))
-        (format nil "+ ~d" PEEC))
-      (if (= 0 PEEE)
-        (if (> 0 PEEC)
-          (format nil "- ~d" (abs PEEC))
-          (format nil "+ ~d" PEEC))))))
+    (if (/= 0 PEEE)
+      (if (/= 1 PEEE)
+        (format NIL "x^~d" PEEE)
+        "x")
+      NIL)
+    NIL))
 
-(defun stringify-PExpr-element (PEE)
-  (if (/= 0 (get-coefficient PEE))
-    (format nil "~{~A~}" (remove nil (list (stringify-PExpr-element-coefficient (get-coefficient PEE) (get-exponent PEE)) (stringify-PExpr-element-exponent (get-exponent PEE)))))))
+(defun stringify-PExpr-element-coefficient-sign (PEEC)
+  (if (/= 0 PEEC)
+    (if (> 0 PEEC) "-" "+")
+    NIL))
 
-(defun list-stringify-PExpr (PE)
-  (remove nil (mapcar #'(lambda(PEE) (stringify-PExpr-element PEE)) PE)))
+(defun stringify-PExpr-element-coefficient-value (PEEC PEEE)
+  (if (/= 0 PEEC)
+    (if (/= 0 PEEE)
+      (if (= 1 (abs PEEC))
+        NIL
+        (format nil "~d" (abs PEEC)))
+      (format nil "~d" (abs PEEC)))
+    NIL))
+
+(defun PExpr-element-tokens (PEE)
+  (remove nil
+    (list
+      (stringify-PExpr-element-coefficient-sign (get-coefficient PEE))
+      (stringify-PExpr-element-coefficient-value (get-coefficient PEE) (get-exponent PEE))
+      (stringify-PExpr-element-exponent (get-coefficient PEE) (get-exponent PEE)))))
+
+(defun stringify-first-pexpr-tokens (PEET)
+  (if (null PEET)
+    NIL
+    (if (equal "+" (nth 0 PEET))
+      (format nil "~{~A~}" (cdr PEET))
+      (format nil "~{~A~}" PEET))))
+
+(defun stringify-other-pexpr-tokens (PEET)
+  (if (null PEET)
+   nil
+   (format nil "~A ~{~A~}" (car PEET) (cdr PEET))))
+
+(defun gen-token-list (PE)
+  (remove nil (mapcar #'(lambda(PEE) (PExpr-element-tokens PEE)) PE)))
+
+(defun stringify-token-list (TE)
+  (if (null TE)
+    0
+    (format nil "~{~A~^ ~}"
+      (cons
+        (stringify-first-pexpr-tokens (car TE))
+        (mapcar #'(lambda(PEE) (stringify-other-pexpr-tokens PEE)) (cdr TE))))))
 
 (defun stringify-PExpr (PE)
-  (format nil "~{~A~^ ~}" (list-stringify-PExpr PE)))
+    (stringify-token-list (gen-token-list PE)))
 
 (defun print-pexpr (P) (stringify-PExpr P))
