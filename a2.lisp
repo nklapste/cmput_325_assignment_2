@@ -314,9 +314,11 @@ return: the simplified A2Expr element or NIL if the A2Expr is invalid"
 (defun concentrate-sorted-PExpr-list (SPE)
  (if (null SPE)
   ()
-  (if (eq (get-exponent (nth 0 SPE)) (get-exponent (nth 1 SPE)))
+  (if (= 0 (get-coefficient (nth 0 SPE)))
+    (concentrate-sorted-PExpr-list (cdr SPE))
+    (if (eq (get-exponent (nth 0 SPE)) (get-exponent (nth 1 SPE)))
       (concentrate-sorted-PExpr-list (cons (add-two-PExpr-components (nth 0 SPE) (nth 1 SPE)) (cddr SPE)))
-      (cons (car SPE) (concentrate-sorted-PExpr-list (cdr SPE))))))
+      (cons (car SPE) (concentrate-sorted-PExpr-list (cdr SPE)))))))
 
 (defun concentrate-PExpr-list (PL)
   (concentrate-sorted-PExpr-list (sort-PExpr PL)))
