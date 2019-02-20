@@ -390,9 +390,9 @@ element's exponent"
   (if (valid-A2Expr-element A2LE)
     (if (valid-A2Expr-list-element A2LE)
       (case (nth 0 A2LE)
-       ('+ (add-PExpr (A2Expr-to-PExpr (nth 1 A2LE)) (A2Expr-to-PExpr (nth 2 A2LE))))
-       ('- (subtract-PExpr (A2Expr-to-PExpr (nth 1 A2LE)) (A2Expr-to-PExpr (nth 2 A2LE))))
-       ('* (multiply-PExpr (A2Expr-to-PExpr (nth 1 A2LE)) (A2Expr-to-PExpr (nth 2 A2LE))))))))
+       (+ (add-PExpr (A2Expr-to-PExpr (nth 1 A2LE)) (A2Expr-to-PExpr (nth 2 A2LE))))
+       (- (subtract-PExpr (A2Expr-to-PExpr (nth 1 A2LE)) (A2Expr-to-PExpr (nth 2 A2LE))))
+       (* (multiply-PExpr (A2Expr-to-PExpr (nth 1 A2LE)) (A2Expr-to-PExpr (nth 2 A2LE))))))))
 
 ; #5.1 (1 mark)
 ;
