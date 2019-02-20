@@ -144,6 +144,10 @@ return: the simplified A2Expr element or NIL if the A2Expr is invalid"
 ; change E in any other way, and return the simplified A2Expr.
 ;
 ; See remove-identities Examples in public tests.
+;
+; NOTE: remove-identities test cases conflict the above description. As such
+; the assertions in the test cases will be followed. Overriding the assertions
+; described above.
 (defun A2Expr-simplify-list-element-q1 (LE)
   "Simplify a A2Expr **list** element. Only applying zero-plus and one-multiply
 simplifications.
@@ -153,7 +157,8 @@ if the A2Expr is invalid"
   (if (valid-A2Expr-element LE)
     (if (valid-A2Expr-list-element  LE)
       (A2Expr-one-multiply-simplify
-        (A2Expr-zero-plus-simplify LE))
+        (A2Expr-zero-subtract-simplify  ; this conflicts the description above, but allows tests 1.2.* to pass
+          (A2Expr-zero-plus-simplify LE)))
       LE)
     NIL))
 
