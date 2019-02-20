@@ -306,6 +306,8 @@ return: the simplified A2Expr element or NIL if the A2Expr is invalid"
  (cdr PEE))
 
 (defun sort-PExpr (PE)
+ "Sort a PExpr (PExpr element by element) by the value of each PExpr
+element's exponent"
  (sort PE #'> :key #'cdr))
 
 (defun add-two-PExpr-components (PEE1 PEE2)
