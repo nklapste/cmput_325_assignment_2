@@ -28,8 +28,8 @@
 (test-case '1.1.6 (remove-identities '(+ (+ 0 0) 0)) 0)
 (test-case '1.1.7 (remove-identities '(+ (+ 5 0) 1)) '(+ 5 1))
 
-; TODO: should these fail as the definition of remove-identities does not
-; include the - Simplifications
+; TODO: should these fail? The definition of remove-identities does not
+; include the (-) subtraction Simplifications
 
 ; basic tests for -
 (test-case '1.2.1 (remove-identities '(- x 0)) 'x)
@@ -289,7 +289,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;Finally, tests that combine polynomial and print-pexpr
 
-; TODO: malformed
 (test-case 'combined.1
     (let
         ((P (polynomial '(- (+ (+ (- (* (* (* x x) (* x x)) (* 3 x))
@@ -297,7 +296,6 @@
                             (+ (* 2 (* 2 (* 2 2))) 1)))))
         (print-pexpr P))
     "3x^5 + 2x^3 + 8x^2 + x - 17")
-
 (test-case 'combined.2
     (let
         ((P (polynomial '(- (* (+ x 5) (- x 5) ) (* x x)))))
