@@ -301,7 +301,6 @@
         ((P (polynomial '(- (* (+ x 5) (- x 5) ) (* x x)))))
         (print-pexpr P))
     "-25")
-; TODO: failing very similar output however
 (test-case 'combined.3
     (let
         ((P (polynomial '(- (* 5 (+ 2 x)) (* 5 (+ x 2))))))

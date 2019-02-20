@@ -515,7 +515,7 @@ element's exponent"
 
 (defun stringify-token-list (TE)
   (if (null TE)
-    0
+    "0"
     (format nil "~{~A~^ ~}"
       (cons
         (stringify-first-pexpr-tokens (car TE))
