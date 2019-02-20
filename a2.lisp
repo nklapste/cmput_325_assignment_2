@@ -254,7 +254,7 @@ return: the simplified A2Expr element or NIL if the A2Expr is invalid"
 ;     with different results.
 ;     If your answer is no, give a good logical argument for why.
 
-;;TODO: answer question
+; TODO: answer question
 
 ;;;;;; Discussion: How to get More Simplifications?
 ;
