@@ -7,7 +7,6 @@
 ;     * If E1 and E2 are A2Expr, then (+ E1 E2), (- E1 E2) and (* E1 E2) are
 ;       A2Expr
 ;     * Nothing else is an A2Expr
-
 (defun valid-A2Expr-op (Op)
   "Check if the A2Expr list element is a valid operator `+`, `-`, or `*`
 Op: the operator element within a A2Expr list element"
@@ -192,7 +191,6 @@ return: the simplified A2Expr element or NIL if the A2Expr is invalid"
 ; in any other way, and return the simplified A2Expr.
 ;
 ; See simplify-zeroes Examples in public tests.
-
 (defun A2Expr-simplify-list-element-q2 (LE)
   "Simplify a A2Expr **list** element. Only applying self-subtract and
 zero-multiply simplifications.
@@ -237,12 +235,10 @@ return: the simplified A2Expr element or NIL if the A2Expr is invalid"
 ; until no more simplification is possible in either step 1 or 2.
 ;
 ; See simplify Examples in public tests.
-
 (defun simplify-rec (E PE)
  (if (equal E PE)
   E
   (simplify-rec (remove-identities (simplify-zeroes E)) E)))
-
 
 (defun simplify (E)
  (simplify-rec (remove-identities (simplify-zeroes E)) E))
@@ -258,6 +254,7 @@ return: the simplified A2Expr element or NIL if the A2Expr is invalid"
 ;     with different results.
 ;     If your answer is no, give a good logical argument for why.
 
+;;TODO: answer question
 
 ;;;;;; Discussion: How to get More Simplifications?
 ;
@@ -352,8 +349,6 @@ element's exponent"
 ; The input E is an arbitrary A2Expr. The output is the equivalent
 ; PExpr of E in normal form. First implement the three helper functions
 ; in 5.1 and 5.2.
-
-
 (defun multiply-PExpr-element (PEE1 PEE2)
   (cons
     (* (get-coefficient PEE1) (get-coefficient PEE2))
@@ -412,7 +407,6 @@ element's exponent"
 ; If n is an integer, then (- n) computes its negative value. Note the space.
 (defun poly-add (P1 P2) (add-PExpr P1 P2))
 
-
 (defun poly-subtract (P1 P2) (subtract-PExpr P1 P2))
 
 
@@ -445,7 +439,6 @@ element's exponent"
 ; 2. atom x - represent by (1 . 1)
 ;
 ; See polynomial examples in public tests.
-
 (defun polynomial (E)
   (A2Expr-to-PExpr E))
 
