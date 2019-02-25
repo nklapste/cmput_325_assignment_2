@@ -254,7 +254,22 @@ return: the simplified A2Expr element or NIL if the A2Expr is invalid"
 ;     with different results.
 ;     If your answer is no, give a good logical argument for why.
 
-; TODO: answer question
+; Answer: Yes
+;
+; Example:
+;
+; call 1:
+; (simplify '(- (+ 1 x) (+ x 1)))
+; > (- (+ 1 X) (+ X 1))
+;
+; call 2:
+; (simplify '(- (+ 1 x) (+ 1 x)))
+; > 0
+;
+; both are equivalent however the algorithm cannot detect)
+; that (+ 1 x) and (+ x 1)) are equivalent. Thus the first call does not
+; simplify to 0.
+
 
 ;;;;;; Discussion: How to get More Simplifications?
 ;
@@ -465,7 +480,6 @@ element's exponent"
 ;
 ; See print-pexpr Examples in public tests, and string functions.
 
-; TODO: this is a dumpster fire and should be refactored
 (defun stringify-PExpr-element-exponent (PEEC PEEE)
   (if (/= 0 PEEC)
     (if (/= 0 PEEE)
