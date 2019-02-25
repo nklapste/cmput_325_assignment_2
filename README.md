@@ -2,7 +2,9 @@
 
 ## Overview
 
-In this assignment, you implement a restricted form of the classic problem of simplifying arithmetic expressions. You first implement two simplification operations, then a general algorithm to transform such expressions into a
+In this assignment, you implement a restricted form of the classic problem of
+simplifying arithmetic expressions. You first implement two simplification
+operations, then a general algorithm to transform such expressions into a
 normal form.
 
 The main restriction is that we only deal with the operations `+`, `-`,
